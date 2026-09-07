@@ -15,7 +15,7 @@ export default tseslint.config(
                         'eslint.config.mjs',
                         'vitest.config.mts',
                         'manifest.json',
-                        'src/capitalize.test.ts',
+                        'src/*.test.ts',
                         'src/test-setup.ts'
                     ]
                 },

@@ -1,9 +1,9 @@
 {
     "id": "sentence-capitalizer",
-    "name": "Sentence Capitalizer",
-    "version": "1.0.1",
+    "name": "Sentence Case & Dash Autocorrect",
+    "version": "1.1.0",
     "minAppVersion": "0.15.0",
-    "description": "Auto-capitalizes the first letter you type at the start of a sentence, undoes cleanly with Cmd/Ctrl+Z.",
+    "description": "Fixes sentence capitalization, two-initial-caps typos, and hyphen-to-dash conversion as you type, undoes cleanly with Cmd/Ctrl+Z.",
     "author": "Kostiantyn Perun",
     "authorUrl": "https://github.com/kosperun",
     "isDesktopOnly": false

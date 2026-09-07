@@ -1,7 +1,7 @@
 {
   "name": "sentence-capitalizer",
-  "version": "1.0.1",
-  "description": "Obsidian plugin that auto-capitalizes the first letter of a sentence as you type",
+  "version": "1.1.0",
+  "description": "Obsidian plugin with Word/LibreOffice-style as-you-type fixes: sentence capitalization, two-initial-caps typos, and hyphen-to-dash conversion",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
