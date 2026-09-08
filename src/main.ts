@@ -16,7 +16,7 @@ const DEFAULT_ALL_SETTINGS: AllSettings = {
 };
 
 const NEW_DEFAULTS_NOTICE =
-	'Sentence Case & Dash Autocorrect: two new autocorrect features (TWo INitial CApitals, en/em-dashes) are now on by default. Open the plugin settings to turn them off if you don\'t want them.';
+	'Sentence Case and Dash Autocorrect: two new autocorrect features (TWo INitial CApitals, en/em-dashes) are now on by default. Open the plugin settings to turn them off if you don\'t want them.';
 
 interface PluginData {
 	settings?: Partial<AllSettings>;

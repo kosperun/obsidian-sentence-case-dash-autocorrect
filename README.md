@@ -1,4 +1,4 @@
-# Sentence Case & Dash Autocorrect
+# Sentence Case and Dash Autocorrect
 
 An Obsidian plugin that fixes a few specific annoyances Word and LibreOffice handle but Obsidian doesn't:
 1. Capitalize first letter of every sentence when you forget to press Shift.
