@@ -44,6 +44,18 @@ async function type(view: EditorView, text: string) {
 	}
 }
 
+// Inserts a whole chunk as a single transaction, the way swipe/gesture typing
+// on a mobile keyboard delivers a word together with its separating space.
+async function insert(view: EditorView, text: string) {
+	const pos = view.state.doc.length;
+	view.dispatch({
+		changes: { from: pos, insert: text },
+		selection: EditorSelection.cursor(pos + text.length),
+		userEvent: 'input.type',
+	});
+	await flush();
+}
+
 describe('shouldCapitalize', () => {
 	const settingsOff: SentenceCapitalizerSettings = { capitalizeListItems: false };
 	const settingsOn: SentenceCapitalizerSettings = { capitalizeListItems: true };
@@ -147,6 +159,29 @@ describe('capitalizeOnWordEnd (integration, real EditorView)', () => {
 		const { view } = makeView({ capitalizeListItems: true });
 		await type(view, '- hello ');
 		expect(view.state.doc.toString()).toBe('- Hello ');
+	});
+
+	it('capitalizes when a swiped word arrives with its leading space in one change', async () => {
+		const { view } = makeView({ capitalizeListItems: true });
+		await type(view, '- [ ] ');
+		await insert(view, 'buy');
+		expect(view.state.doc.toString()).toBe('- [ ] buy');
+		await insert(view, ' milk');
+		expect(view.state.doc.toString()).toBe('- [ ] Buy milk');
+	});
+
+	it('capitalizes when a swiped word arrives with a trailing space in one change', async () => {
+		const { view } = makeView();
+		await insert(view, 'hello ');
+		expect(view.state.doc.toString()).toBe('Hello ');
+	});
+
+	it('does not capitalize a swiped word mid-sentence', async () => {
+		const { view } = makeView();
+		await type(view, 'Buy ');
+		await insert(view, 'some');
+		await insert(view, ' milk');
+		expect(view.state.doc.toString()).toBe('Buy some milk');
 	});
 
 	it('capitalizes after a blockquote marker regardless of the list setting', async () => {

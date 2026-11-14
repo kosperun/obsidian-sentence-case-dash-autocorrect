@@ -38,11 +38,20 @@ export function isInsideCode(state: EditorState, pos: number): boolean {
 	return false;
 }
 
+const FIRST_WORD_TERMINATOR = /[\s.,;:!?]/;
+// Longest inserted chunk that is still treated as typing when the terminator
+// is not its first character (keeps large programmatic inserts out).
+const MAX_TYPED_CHUNK = 50;
+
 /**
- * Given the transaction's changes, finds the position of a single
+ * Given the transaction's changes, finds the position of the first
  * word-terminating character just inserted (space/punctuation, or a newline
  * possibly followed by auto-inserted list/blockquote continuation text).
- * Returns -1 if this transaction didn't insert a matching terminator.
+ *
+ * The terminator does not have to arrive on its own: swipe/gesture typing on
+ * mobile keyboards inserts a whole word together with its separating space in
+ * one change, either leading (" world") or trailing ("hello ").
+ * Returns null if this transaction didn't insert a matching terminator.
  */
 export function findInsertedTerminator(tr: Transaction): { insertedFrom: number; insertedChar: string } | null {
 	let insertedFrom = -1;
@@ -52,13 +61,11 @@ export function findInsertedTerminator(tr: Transaction): { insertedFrom: number;
 		if (insertedFrom !== -1) return;
 		const text = inserted.toString();
 		if (fromA !== toA || text.length < 1) return;
-		if (text.length === 1) {
-			insertedFrom = fromB;
-			insertedChar = text;
-		} else if (text[0] === '\n') {
-			insertedFrom = fromB;
-			insertedChar = '\n';
-		}
+		const index = text.search(FIRST_WORD_TERMINATOR);
+		if (index < 0) return;
+		if (index > 0 && text.length > MAX_TYPED_CHUNK) return;
+		insertedFrom = fromB + index;
+		insertedChar = text.charAt(index);
 	});
 
 	if (insertedFrom === -1 || !WORD_TERMINATOR.test(insertedChar)) return null;
