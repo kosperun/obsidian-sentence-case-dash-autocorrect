@@ -128,6 +128,18 @@ describe('capitalizeOnWordEnd (integration, real EditorView)', () => {
 		expect(view.state.doc.toString()).toBe('Hello\n');
 	});
 
+	it('capitalizes when swipe typing inserts the next word with its leading space', async () => {
+		const { view } = makeView();
+		await type(view, 'hello');
+		view.dispatch({
+			changes: { from: view.state.doc.length, insert: ' world' },
+			selection: EditorSelection.cursor(view.state.doc.length + 6),
+			userEvent: 'input.type',
+		});
+		await flush();
+		expect(view.state.doc.toString()).toBe('Hello world');
+	});
+
 	it('does not touch a deliberately lowercase word mid-composition', async () => {
 		const { view } = makeView();
 		// Typing "ok" after "Done. " should not be touched until a terminator follows.

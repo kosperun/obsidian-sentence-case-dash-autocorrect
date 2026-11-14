@@ -58,6 +58,10 @@ export function findInsertedTerminator(tr: Transaction): { insertedFrom: number;
 		} else if (text[0] === '\n') {
 			insertedFrom = fromB;
 			insertedChar = '\n';
+		} else if (WORD_TERMINATOR.test(text.charAt(0))) {
+			// Swipe typing inserts the next word together with its leading space.
+			insertedFrom = fromB;
+			insertedChar = text.charAt(0);
 		}
 	});
 
